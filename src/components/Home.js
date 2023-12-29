@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+
 function Home() {
     return (
         <div className='flex justify-center align-center flex-column home'>
