@@ -1,0 +1,373 @@
+
+
+.flex {
+    display: flex;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.home {
+    background-color: #0E1E3C;
+    font-size: large;
+    font-weight: bolder;
+    color: white;
+    width: 100%;
+    height: 650px;
+}
+
+
+.home button {
+    margin-top: 1rem;
+    line-height: 2rem;
+    background-color: #0E1E3C;
+    color: white;
+    border: 2px solid white;
+    padding: 1rem;
+}
+
+.home button img {
+    width: 2rem;
+    margin: -0.4rem;
+    padding-left: 1rem;
+}
+
+.home button:hover {
+    background-color: #2980b9;
+    color: white;
+    border: 2px solid white;
+}
+
+.main-container {
+    background-color: #F8F9FA;
+    width: 100%;
+    /* border: 2px solid blue; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main-header {
+    max-width: 1248px;
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-header h4 {
+    color: #5E687C;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 48px;
+    text-align: left;
+}
+
+.main-header p {
+    color: #9098A5;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+}
+
+.product-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* border: 1px solid red; */
+}
+
+.product-card {
+    /* border: 1px solid black; */
+    max-width: 828px;
+    height: 543px;
+    padding: 36px;
+    border-radius: 24px;
+    gap: 20px;
+    background-color: #FFFFFF;
+    margin: 2rem 0;
+}
+
+.product-item {
+    /* border: 2px solid green; */
+    max-width: 756px;
+    height: 471px;
+    top: 36px;
+    left: 36px;
+    gap: 36px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.image-container {
+    max-width: 360px;
+    height: 471px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.image-container .main-image {
+    max-width: 360px;
+    height: 338px;
+    padding: 29px 30px 29px 29px;
+    border-radius: 20px;
+    background-color: #F8F9FA;
+
+}
+
+.image-container .main-image img {
+    width: 301px;
+    height: 280px;
+    top: 29px;
+    left: 29px;
+}
+
+.image-container .image-list {
+    max-width: 360px;
+    height: 71px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 2rem;
+    padding: 1.6rem 0;
+}
+
+.image-container .image-list .box {
+    background-color: #F8F9FA;
+    max-width: 76px;
+    height: 71px;
+    border-radius: 1rem;
+    border: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.6rem;
+    border: 1px solid red;
+
+}
+
+
+.image-container .image-list img {
+    width: 55px;
+    height: 52px;
+    border-radius: 12px;
+}
+
+
+
+.details-container {
+    /* border: 1px solid black; */
+    width: 360px;
+    height: 471px;
+    gap: 20px;
+
+}
+
+.product-name {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+
+}
+
+.heart-icon {
+    width: 60px;
+    height: 60px;
+    background: #F8F9FA;
+    border-radius: 8px;
+}
+
+.icon {
+    max-width: 20px;
+    height: 17.78px;
+    top: 3.52px;
+    left: 2px;
+
+}
+
+.status {
+    max-width: 110px;
+    height: 23px;
+    padding: 4px 12px 4px 12px;
+    border-radius: 4px;
+    gap: 10px;
+    background-color: #EAECFB;
+}
+
+.status p {
+    font-size: 12px;
+    font-weight: 500px;
+    line-height: 15px;
+    text-align: center;
+    color: #707FE2;
+}
+
+
+.country {
+    max-width: 91px;
+    height: 23px;
+    padding: 4px 12px 4px 12px;
+    border-radius: 4px;
+    gap: 10px;
+    background-color: #FFE389;
+    margin-left: 6px;
+}
+
+.country p {
+    color: #B59738;
+    font-size: 12px;
+    font-weight: 500px;
+    line-height: 15px;
+    text-align: center;
+
+}
+
+.main p {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 0px;
+    text-align: left;
+    color: #B4B9C3;
+
+}
+
+.main h3 {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 0px;
+    letter-spacing: -0.04em;
+    text-align: left;
+    color: #9098A5;
+
+}
+
+.price p {
+
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #9098A5;
+
+}
+
+.price h3 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 0;
+    text-align: left;
+    color: #0E1E3C;
+}
+
+.available {
+    font-size: 12px;
+    font-weight: 400px;
+    line-height: 17px;
+    text-align: left;
+}
+
+.icon-container .icon-box {
+    max-width: 90px;
+    height: 40px;
+    padding: 4px 12px 4px 12px;
+    border-radius: 4px;
+    gap: 10px;
+    background-color: #F8F9FA;
+
+}
+
+.icon-box img {
+    max-width: 44px;
+    padding: 12px;
+
+}
+
+.offer {
+    max-width: 136px;
+    height: 13px;
+    padding: 4px 12px 4px 12px;
+    border-radius: 4px;
+    gap: 10px;
+}
+
+.brand {
+    max-width: 49px;
+    height: 20px;
+
+}
+
+.button {
+    margin: 37px 1px;
+    max-width: 360px;
+    height: 20px;
+    padding: 12px 100px;
+    border-radius: 12px;
+    border: 1px;
+    gap: 10px;
+    text-align: center;
+    background-color: #C62A1C;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    /* line-height: 24px; */
+    /* letter-spacing: 0em; */
+    text-align: center;
+
+
+}
+
+
+
+@media (max-width: 900px) {
+
+    .product-card {
+        height: 950px;
+        width: 80%;
+    }
+
+    .product-item {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .image-container {
+        max-width: 100% !important;
+    }
+
+    .image-container .main-image {
+        max-width: 100% !important;
+    }
+
+    .image-container .main-image img {
+        width: 100%;
+    }
+
+    .image-container .image-list {
+        width: 100%;
+    }
+
+    .details-container {
+        width: 100%;
+    }
+}
