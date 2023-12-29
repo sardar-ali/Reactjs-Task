@@ -1,7 +1,7 @@
 
 1)
 clone the project from github
-run command in terminal/bash/cmd        git clone repository url
+run command in terminal/bash/cmd        git clone https://github.com/sardar-ali/Reactjs-Task.git
 
 2)
 go to project directory
