@@ -6,7 +6,7 @@ pipeline {
             steps {
                 
                 sh '''
-                echo "build stage ...
+                echo "build stage ..."
                 '''
             }
         }
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 
                 sh '''
-                testings stage ...
+                echo "testings stage ..."
                 '''
             }
         }
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 
                 sh '''
-                Staging deploye stage
+                echo "Staging deploye stage"
                 '''
             }
         }
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 
                 sh '''
-                Prod deploye stage
+                echo "Prod deploye stage"
                 '''
             }
         }
