@@ -22,7 +22,7 @@
 .product-area {
     margin: 3rem;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     width: 1120px;
     flex-wrap: wrap;
     padding-left: 3rem;

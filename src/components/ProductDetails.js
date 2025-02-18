@@ -28,14 +28,14 @@ function ProductDetails() {
                     <div className='product-item'>
                         <div className='image-container'>
                             <div className='main-image'>
-                                <img src={product?.thumbnail} />
+                                <img src={product?.thumbnail} alt='img' />
                             </div>
                             <div className='image-list'>
                                 {product?.images?.length && product?.images?.slice(0, 4).map((img, ind, arr) => {
 
                                     return (
                                         <div className={` box ${arr[0] === img ? "is-selected" : ""} `}>
-                                            <img className={`'active-image'}`} src={img} />
+                                            <img className={`'active-image'}`} src={img} alt='img' />
                                         </div>
                                     )
 
@@ -45,16 +45,16 @@ function ProductDetails() {
                         <div className='details-container'>
                             <div className='flex space-between'>
                                 <div>
-                                    <img className="offere" src='/images/offer.png' />
+                                    <img className="offere" src='/images/offer.png' alt='img' />
                                 </div>
                                 <div>
-                                    <img className="brand" src='/images/brand.png' />
+                                    <img className="brand" src='/images/brand.png' alt='img'/>
                                 </div>
                             </div>
                             <div className='flex space-between'>
                                 <h3 className='product-name'>{product?.title}</h3>
                                 <p className='flex justify-center align-center heart-icon'>
-                                    <img className='icon' src='/images/heart.png' />
+                                    <img className='icon' src='/images/heart.png' alt='img' />
                                 </p>
                             </div>
                             <div className='flex'>
@@ -95,16 +95,16 @@ function ProductDetails() {
                                 <p className="available">Also available on</p>
                                 <div className="icon-container flex space-between">
                                     <div className="icon-box flex justify-center align center">
-                                        <img src="/images/Rectangle-1247.png" />
+                                        <img src="/images/Rectangle-1247.png" alt='img' />
                                     </div>
                                     <div className="icon-box flex justify-center align center">
-                                        <img src="/images/Rectangle-123.png" />
+                                        <img src="/images/Rectangle-123.png" alt='img' />
                                     </div>
                                     <div className="icon-box flex justify-center align center">
-                                        <img src="/images/Rectangle-1234.png" />
+                                        <img src="/images/Rectangle-1234.png" alt='img' />
                                     </div>
                                     <div className="icon-box flex justify-center align center">
-                                        <img src="/images/Frame-358.png" />
+                                        <img src="/images/Frame-358.png" alt='img'/>
                                     </div>
                                 </div>
                                 <div className="button">

@@ -20,7 +20,7 @@ function Products() {
         if (!products.length) {
             getProductList()
         }
-    }, []);
+    }, [products?.length]);
 
     // Navigate to the product details screen programmatically
     const handleProductClick = (id) => {
@@ -40,7 +40,7 @@ function Products() {
                         return (
                             <div className='card' key={itm?.id} onClick={() => handleProductClick(itm?.id)}>
                                 <div className='img-card'>
-                                    <img src={itm?.thumbnail} />
+                                    <img src={itm?.thumbnail} alt='img'/>
                                 </div>
                                 <div className='description'>
                                     <p>{itm?.title}</p>
