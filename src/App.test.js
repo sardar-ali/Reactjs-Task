@@ -3,6 +3,6 @@ import App from './App';
 
 test("checks if the title contains 'React App'", () => {
   render(<App />);
-  const titleElement = screen.getByText(/React App/i); // Case insensitive match
+  const titleElement = screen.getByText(/React App/i);
   expect(titleElement).toBeInTheDocument();
 });
