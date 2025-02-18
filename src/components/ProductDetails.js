@@ -34,7 +34,7 @@ function ProductDetails() {
                                 {product?.images?.length && product?.images?.slice(0, 4).map((img, ind, arr) => {
 
                                     return (
-                                        <div className={` box ${arr[0] == img ? "is-selected" : ""} `}>
+                                        <div className={` box ${arr[0] === img ? "is-selected" : ""} `}>
                                             <img className={`'active-image'}`} src={img} />
                                         </div>
                                     )
