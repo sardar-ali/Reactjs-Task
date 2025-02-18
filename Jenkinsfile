@@ -14,7 +14,8 @@ pipeline {
                 sh '''
                 node --version
                 npm --version
-                echo "build stage ..."
+                npm ci
+                npm run build
                 '''
             }
         }
