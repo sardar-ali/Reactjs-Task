@@ -3,9 +3,16 @@ pipeline {
 
     stages {
         stage('Build') {
+            agent{
+                docker{
+                    image "node:18.20.6-alpine3.20"
+                }
+            }
             steps {
                 
                 sh '''
+                node --version
+                npm --version
                 echo "build stage ..."
                 '''
             }
