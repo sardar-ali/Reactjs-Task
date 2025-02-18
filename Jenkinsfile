@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             agent{
                 docker {
-                    image "node:18.20.6-alpine3.20"
+                    image "node:20.18.3-alpine3.20"
                     reuseNode true 
                 }
             }
@@ -22,10 +22,15 @@ pipeline {
 
 
         stage('Test') {
+              agent{
+                docker {
+                    image "node:20.18.3-alpine3.20"
+                    reuseNode true 
+                }
+            }
             steps {
-                
                 sh '''
-                echo "testings stage ..."
+                test -f build/index.html && npm run test
                 '''
             }
         }
