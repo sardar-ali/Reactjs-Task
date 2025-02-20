@@ -33,6 +33,12 @@ pipeline {
                 test -f build/index.html && npm run test
                 '''
             }
+
+            post {
+                always {
+                    junit 'jest-result/junit.xml'
+                }
+            }
         }
 
 
