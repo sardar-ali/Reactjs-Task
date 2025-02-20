@@ -50,17 +50,18 @@ pipeline {
             }
             steps {
                 sh '''
-                npm install -s serve
-                serve -s build
+                npm install serve
+                serve -s build &
+                sleep 3
                 npx playwright test
                 '''
             }
 
-            post {
-                always {
-                    junit 'jest-results/junit.xml'
-                }
-            }
+            // post {
+            //     always {
+            //         junit 'jest-results/junit.xml'
+            //     }
+            // }
         }
 
 
