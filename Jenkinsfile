@@ -15,7 +15,7 @@ pipeline {
                 node --version
                 npm --version
                 npm install
-                CI=false npm run build
+                npm run build
                 '''
             }
         }
