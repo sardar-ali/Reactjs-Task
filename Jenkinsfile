@@ -58,6 +58,11 @@ pipeline {
 
                 '''
             }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwrite HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                }
+            }
         }
 
         stage('Staging deploye') {
