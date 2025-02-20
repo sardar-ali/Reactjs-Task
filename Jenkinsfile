@@ -41,25 +41,24 @@ pipeline {
             }
         }
 
-       stage('E2E Test') {
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/playwright:v1.50.1-jammy'  // Updated Playwright version
+
+        stage ("E2E Test") {
+            agent{
+                docker{
+                    image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                npm install  serve  
-                node_moudles/.bin/serve -s build &   
+                npm install serve
+                node_modules/.bin/serve -s build &
                 sleep 10
-                npx playwright test   
+                npx playwright test
+
                 '''
             }
         }
-
-
-
 
         stage('Staging deploye') {
             steps {
