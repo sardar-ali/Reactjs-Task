@@ -79,7 +79,7 @@ pipeline {
                 
                 sh '''
                 npm install netlify-cli
-                node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --dir=build --json=true > deploye-out.txt
+                node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --dir=build --json > deploye-out.txt
                 '''
             }
         }
