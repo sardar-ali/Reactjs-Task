@@ -4,6 +4,7 @@ pipeline {
         NETLIFY_SITE_ID = "d00183e1-9fe7-477b-af0f-1ca6bce33e68"
         NETLIFY_AUTH_TOKEN = credentials("Netlify-token-for-react-app")
     }
+
     stages {
         stage('Build') {
             agent{
@@ -58,12 +59,11 @@ pipeline {
                 node_modules/.bin/serve -s build &
                 sleep 10
                 npx playwright test --reporter=html 
-
                 '''
             }
             post {
                 always {
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Local Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
                 }
             }
         }
@@ -90,9 +90,22 @@ pipeline {
                 npm install netlify-cli
                 node_modules/.bin/netlify --version
                 node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
-                ls -al
-                echo "Prod deploye stage"
                 '''
+            }
+        }
+          stage ("Production E2E Test") {
+            environment {
+                CI_ENVIRONMENT_URL="https://cheery-mooncake-c6e19d.netlify.app/"
+            }
+            steps {
+                sh '''
+                npx playwright test --reporter=html 
+                '''
+            }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Prod Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                }
             }
         }
         
