@@ -80,8 +80,8 @@ pipeline {
                 sh '''
                 npm install netlify-cli node-jq
                 node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --dir=build --json > deploye-out.txt
-                DEPLOY_URL=$(node_modules/.bin/node-jq -r .deploy_url deploye-out.txt)
-                echo "Netlify Deploy URL: $DEPLOY_URL"
+                CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r .deploy_url deploye-out.txt)
+                echo "Netlify Deploy URL: $CI_ENVIRONMENT_URL"
                 '''
             }
         }
