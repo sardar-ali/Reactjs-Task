@@ -75,9 +75,17 @@ pipeline {
         }
 
         stage('Production Deploy') {
+            agent {
+                docker {
+                    image 'node:20.18.3-alpine3.20'
+                    reuseNode true
+                }
+            }
             steps {
                 
                 sh '''
+                npm install netlify-cli
+                netlify --version
                 echo "Prod deploye stage"
                 '''
             }
