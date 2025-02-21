@@ -3,6 +3,7 @@ pipeline {
     environment {
         NETLIFY_SITE_ID = "d00183e1-9fe7-477b-af0f-1ca6bce33e68"
         NETLIFY_AUTH_TOKEN = credentials("Netlify-token-for-react-app")
+        DATA=""
     }
 
     stages {
@@ -80,8 +81,8 @@ pipeline {
                 sh '''
                 npm install netlify-cli node-jq
                 node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --dir=build --json > deploye-out.txt
-                CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r .deploy_url deploye-out.txt)
-                echo "Netlify Deploy URL: $CI_ENVIRONMENT_URL"
+                env.DATA=$(node_modules/.bin/node-jq -r .deploy_url deploye-out.txt)
+                echo "Netlify Deploy URL: $env.DATA"
                 '''
             }
         }
@@ -110,12 +111,12 @@ pipeline {
                     reuseNode true
                 }
             }
-            // environment {
-            //     CI_ENVIRONMENT_URL="https://cheery-mooncake-c6e19d.netlify.app/"
-            // }
+            environment {
+                CI_ENVIRONMENT_URL="$env.DATA"
+            }
             steps {
                 sh '''
-                echo " CI_ENVIRONMENT_URL: $CI_ENVIRONMENT_URL"
+                echo "CI_ENVIRONMENT_URL: $CI_ENVIRONMENT_URL, $env.DATA"
                 npx playwright test --reporter=html 
                 '''
             }
