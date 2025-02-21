@@ -69,10 +69,17 @@ pipeline {
         }
 
         stage('Staging deploye') {
+             agent {
+                docker {
+                    image 'node:20.18.3-alpine3.20'
+                    reuseNode true
+                }
+            }
             steps {
                 
                 sh '''
-                echo "Staging deploye stage"
+                npm install netlify-cli
+                node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID  --dir=build
                 '''
             }
         }
@@ -94,7 +101,7 @@ pipeline {
             }
         }
           stage ("Production E2E Test") {
-              agent{
+            agent{
                 docker{
                     image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
                     reuseNode true
