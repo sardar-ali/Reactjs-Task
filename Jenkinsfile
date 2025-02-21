@@ -79,7 +79,7 @@ pipeline {
                 
                 sh '''
                 npm install netlify-cli
-                node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID  --dir=build
+                node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --dir=build --json=true > deploye-out.txt
                 '''
             }
         }
@@ -100,7 +100,8 @@ pipeline {
                 '''
             }
         }
-          stage ("Production E2E Test") {
+
+        stage ("Production E2E Test") {
             agent{
                 docker{
                     image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
