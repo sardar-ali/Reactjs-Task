@@ -87,7 +87,7 @@ pipeline {
 // echo "Netlify Deploy URL: $env.DATA"
                 script{
                     // CI_ENVIRONMENT_URL=sh("node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true   )
-                    CI_ENVIRONMENT_URL = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true).trim()
+                    env.DATA=sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true).trim()
                 }
             }
         }
@@ -101,12 +101,11 @@ pipeline {
                     reuseNode true
                 }
             }
-            // environment {
-            //     CI_ENVIRONMENT_URL="$env.DATA"
-            // }
+            environment {
+                CI_ENVIRONMENT_URL="$env.DATA"
+            }
             steps {
                 sh '''
-                echo "CI_ENVIRONMENT_URL: $CI_ENVIRONMENT_URL, $env.DATA"
                 npx playwright test --reporter=html 
                 '''
             }
