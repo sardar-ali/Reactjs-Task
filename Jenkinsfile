@@ -116,8 +116,11 @@ pipeline {
         stage('Approval') {
             steps {
                 script {
+                    timeout(time: 5, unit: 'MINUTES') {
+                        // some block
                     // Wait for approval
                     input message: 'Do you approve this build?', submitter: 'approver@example.com'
+                    }   
                 }
             }
         }
