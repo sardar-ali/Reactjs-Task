@@ -80,14 +80,10 @@ pipeline {
                 
                 sh '''
                 npm install netlify-cli node-jq
-                node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --dir=build --json > deploye-out.txt
-                
+                node_modules/.bin/netlify deploy --dir=build --json > deploye-out.txt     
                 '''
-// env.DATA=$(node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt)
-// echo "Netlify Deploy URL: $env.DATA"
                 script{
-                    // CI_ENVIRONMENT_URL=sh("node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true   )
-                    env.DATA=sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true).trim()
+                    env.DATA = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true)
                 }
             }
         }
@@ -102,7 +98,7 @@ pipeline {
                 }
             }
             environment {
-                CI_ENVIRONMENT_URL="$env.DATA"
+                CI_ENVIRONMENT_URL="{$env.DATA}"
             }
             steps {
                 sh '''
