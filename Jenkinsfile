@@ -85,7 +85,7 @@ pipeline {
                     // Store the deploy URL in an environment variable
                     env.DATA = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true).trim()
                     echo "Netlify Deploy URL: $env.DATA"
-                    echo "Builder number and application version :: $APP_VERSION"
+                    echo "Builder number and application version :: $REACT_APP_VERSION"
                 }
             }
         }
