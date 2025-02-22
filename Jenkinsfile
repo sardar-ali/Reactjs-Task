@@ -3,7 +3,6 @@ pipeline {
     environment {
         NETLIFY_SITE_ID = "d00183e1-9fe7-477b-af0f-1ca6bce33e68"
         NETLIFY_AUTH_TOKEN = credentials("Netlify-token-for-react-app")
-        DATA=""
     }
 
     stages {
@@ -68,39 +67,40 @@ pipeline {
                 }
             }
         }
-
-        stage('Staging deploye') {
-             agent {
+stage('Staging deploy') {
+            agent {
                 docker {
                     image 'node:20.18.3-alpine3.20'
                     reuseNode true
                 }
             }
             steps {
-                
                 sh '''
                 npm install netlify-cli node-jq
                 node_modules/.bin/netlify deploy --dir=build --json > deploye-out.txt     
                 '''
-                script{
-                    env.DATA = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true)
+                script {
+                    // Store the deploy URL in an environment variable
+                    env.DATA = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true).trim()
+                    echo "Netlify Deploy URL: $env.DATA"
                 }
             }
         }
 
-        
-
-        stage ("Staging E2E Test") {
-            agent{
-                docker{
+        stage("Staging E2E Test") {
+            agent {
+                docker {
                     image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
                     reuseNode true
                 }
             }
             environment {
-                CI_ENVIRONMENT_URL="{$env.DATA}"
+                CI_ENVIRONMENT_URL = "${env.DATA}" // Use global env.DATA
             }
             steps {
+                script {
+                    echo "Using CI_ENVIRONMENT_URL: ${CI_ENVIRONMENT_URL}" // Debugging
+                }
                 sh '''
                 echo "$CI_ENVIRONMENT_URL"
                 npx playwright test --reporter=html 
@@ -112,6 +112,48 @@ pipeline {
                 }
             }
         }
+        // stage('Staging deploye') {
+        //      agent {
+        //         docker {
+        //             image 'node:20.18.3-alpine3.20'
+        //             reuseNode true
+        //         }
+        //     }
+        //     steps {
+                
+        //         sh '''
+        //         npm install netlify-cli node-jq
+        //         node_modules/.bin/netlify deploy --dir=build --json > deploye-out.txt     
+        //         '''
+        //         script{
+        //             env.DATA = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true)
+        //             echo "$env.DATA"
+        //         }
+        //     }
+        // }
+
+        // stage ("Staging E2E Test") {
+        //     agent{
+        //         docker{
+        //             image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
+        //             reuseNode true
+        //         }
+        //     }
+        //     environment {
+        //         CI_ENVIRONMENT_URL="{$env.DATA}"
+        //     }
+        //     steps {
+        //         sh '''
+        //         echo "$CI_ENVIRONMENT_URL"
+        //         npx playwright test --reporter=html 
+        //         '''
+        //     }
+        //     post {
+        //         always {
+        //             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Prod Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+        //         }
+        //     }
+        // }
 
 
         stage('Production Deploy') {
