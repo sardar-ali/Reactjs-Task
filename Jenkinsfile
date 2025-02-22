@@ -81,28 +81,16 @@ pipeline {
                 sh '''
                 npm install netlify-cli node-jq
                 node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --dir=build --json > deploye-out.txt
-                env.DATA=$(node_modules/.bin/node-jq -r .deploy_url deploye-out.txt)
+                env.DATA=$(node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt)
                 echo "Netlify Deploy URL: $env.DATA"
                 '''
             }
+            scrip{
+
+            }
         }
 
-        stage('Production Deploy') {
-            agent {
-                docker {
-                    image 'node:20.18.3-alpine3.20'
-                    reuseNode true
-                }
-            }
-            steps {
-                
-                sh '''
-                npm install netlify-cli
-                node_modules/.bin/netlify --version
-                node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
-                '''
-            }
-        }
+        
 
         stage ("Staging E2E Test") {
             agent{
@@ -128,6 +116,22 @@ pipeline {
         }
 
 
+        stage('Production Deploy') {
+                    agent {
+                        docker {
+                            image 'node:20.18.3-alpine3.20'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+
+                        sh '''
+                        npm install netlify-cli
+                        node_modules/.bin/netlify --version
+                        node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
+                        '''
+                    }
+        }
         stage ("Production E2E Test") {
             agent{
                 docker{
