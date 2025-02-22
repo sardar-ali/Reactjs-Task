@@ -1,7 +1,7 @@
-import './App.css';
+import "./App.css";
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import Products from './components/Products';
-import Home from './components/Home';
+import Home from "./components/Home";
 // import ProductDetails from './components/ProductDetails';
 
 function App() {
@@ -17,7 +17,6 @@ function App() {
     //     <Route path="*" element={<h2>page note found</h2>} />
     //   </Routes>
     // </BrowserRouter>
-
   );
 }
 

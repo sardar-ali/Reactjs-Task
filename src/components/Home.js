@@ -10,7 +10,7 @@ function Home() {
       <button>
         Go To Product Screen <img src="/images/arrow.jpg" alt="img" />
       </button>
-      <p>{process.env.APP_VERSION ?? "1.0.0"} v</p>
+      <p>{process.env.REACT_APP_VERSION ?? "1.0.0"} v</p>
       {/* </Link> */}
     </div>
   );
