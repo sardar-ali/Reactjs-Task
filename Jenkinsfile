@@ -119,7 +119,7 @@ pipeline {
                     timeout(time: 5, unit: 'MINUTES') {
                         // some block
                     // Wait for approval
-                    input message: 'Do you approve this build?', submitter: 'approver@example.com'
+                    input message: 'Are you sure your want to deploy to production ?', ok: 'Are you sure'
                     }   
                 }
             }
