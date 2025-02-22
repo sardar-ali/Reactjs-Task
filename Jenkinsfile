@@ -3,6 +3,7 @@ pipeline {
     environment {
         NETLIFY_SITE_ID = "d00183e1-9fe7-477b-af0f-1ca6bce33e68"
         NETLIFY_AUTH_TOKEN = credentials("Netlify-token-for-react-app")
+        APP_VERSION = "1.0.${BUILD_NUMBER}" 
     }
 
     stages {
@@ -84,6 +85,7 @@ pipeline {
                     // Store the deploy URL in an environment variable
                     env.DATA = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true).trim()
                     echo "Netlify Deploy URL: $env.DATA"
+                    echo "Builder number and application version :: $APP_VERSION"
                 }
             }
         }
@@ -113,6 +115,7 @@ pipeline {
                 }
             }
         }
+
         stage('Approval') {
             steps {
                 script {
@@ -124,6 +127,7 @@ pipeline {
                 }
             }
         }
+
         stage('Production Deploy') {
                     agent {
                         docker {
