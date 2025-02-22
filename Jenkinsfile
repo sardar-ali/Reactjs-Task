@@ -84,9 +84,9 @@ pipeline {
                 
                 '''
 // env.DATA=$(node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt)
-                // echo "Netlify Deploy URL: $env.DATA"
+// echo "Netlify Deploy URL: $env.DATA"
                 script{
-                    CI_ENVIRONMENT_URL=sh('node_modules/.bin/node-jq -r ".deploy_url" deploye-out.txt)', returnStdout: true)
+                    CI_ENVIRONMENT_URL=sh("node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt"), returnStdout: true)
                 }
             }
         }
