@@ -67,7 +67,8 @@ pipeline {
                 }
             }
         }
-stage('Staging deploy') {
+
+        stage('Staging deploy') {
             agent {
                 docker {
                     image 'node:20.18.3-alpine3.20'
@@ -95,11 +96,11 @@ stage('Staging deploy') {
                 }
             }
             environment {
-                CI_ENVIRONMENT_URL = "${env.DATA}" // Use global env.DATA
+                CI_ENVIRONMENT_URL = "${env.DATA}" 
             }
             steps {
                 script {
-                    echo "Using CI_ENVIRONMENT_URL: ${CI_ENVIRONMENT_URL}" // Debugging
+                    echo "Using CI_ENVIRONMENT_URL: ${CI_ENVIRONMENT_URL}" 
                 }
                 sh '''
                 echo "$CI_ENVIRONMENT_URL"
@@ -108,54 +109,18 @@ stage('Staging deploy') {
             }
             post {
                 always {
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Prod Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Stage Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
                 }
             }
         }
-        // stage('Staging deploye') {
-        //      agent {
-        //         docker {
-        //             image 'node:20.18.3-alpine3.20'
-        //             reuseNode true
-        //         }
-        //     }
-        //     steps {
-                
-        //         sh '''
-        //         npm install netlify-cli node-jq
-        //         node_modules/.bin/netlify deploy --dir=build --json > deploye-out.txt     
-        //         '''
-        //         script{
-        //             env.DATA = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true)
-        //             echo "$env.DATA"
-        //         }
-        //     }
-        // }
-
-        // stage ("Staging E2E Test") {
-        //     agent{
-        //         docker{
-        //             image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
-        //             reuseNode true
-        //         }
-        //     }
-        //     environment {
-        //         CI_ENVIRONMENT_URL="{$env.DATA}"
-        //     }
-        //     steps {
-        //         sh '''
-        //         echo "$CI_ENVIRONMENT_URL"
-        //         npx playwright test --reporter=html 
-        //         '''
-        //     }
-        //     post {
-        //         always {
-        //             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Prod Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-        //         }
-        //     }
-        // }
-
-
+        stage('Approval') {
+            steps {
+                script {
+                    // Wait for approval
+                    input message: 'Do you approve this build?', submitter: 'approver@example.com'
+                }
+            }
+        }
         stage('Production Deploy') {
                     agent {
                         docker {
@@ -172,6 +137,7 @@ stage('Staging deploy') {
                         '''
                     }
         }
+
         stage ("Production E2E Test") {
             agent{
                 docker{
