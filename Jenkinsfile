@@ -85,9 +85,6 @@ pipeline {
                 echo "Netlify Deploy URL: $env.DATA"
                 '''
             }
-            scrip{
-
-            }
         }
 
         
