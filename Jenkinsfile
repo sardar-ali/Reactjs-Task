@@ -101,28 +101,21 @@ pipeline {
                     reuseNode true
                 }
             }
-            // environment {
-            //     CI_ENVIRONMENT_URL = "${env.DATA}" 
-            // }
-              steps {
-                script {
-                    // Install dependencies and deploy
-                    sh '''
-                        npm install netlify-cli node-jq
-                        node_modules/.bin/netlify deploy --dir=build --json > deploy-out.txt
-                    '''
+            environment {
+                CI_ENVIRONMENT_URL = "" 
+            }
+            steps {
+                // script {
+                //     echo "Using CI_ENVIRONMENT_URL: ${CI_ENVIRONMENT_URL}" 
+                // }
 
-                    // Extract deploy URL in Groovy
-                    def CI_ENVIRONMENT_URL = sh(
-                        script: "node_modules/.bin/node-jq -r '.deploy_url' deploy-out.txt",
-                        returnStdout: true
-                    ).trim()
-
-                    echo "Deployed URL: ${CI_ENVIRONMENT_URL}"
-
-                    // Run Playwright tests
-                    sh 'npx playwright test --reporter=html'
-                }
+                sh '''
+                npm install netlify-cli node-jq
+                node_modules/.bin/netlify deploy --dir=build --json > deploye-out.txt   
+                CI_ENVIRONMENT_URL = $(node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt)
+                echo "$CI_ENVIRONMENT_URL"
+                npx playwright test --reporter=html 
+                '''
             }
             post {
                 always {
