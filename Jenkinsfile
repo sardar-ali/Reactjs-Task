@@ -89,15 +89,9 @@ pipeline {
         // }
 
         stage("Staging E2E Test") {
-            // agent {
-            //     docker {
-            //         image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
-            //         reuseNode true
-            //     }
-            // }
             agent {
                 docker {
-                    image 'node:20.18.3-alpine3.20'
+                    image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
                     reuseNode true
                 }
             }
@@ -105,15 +99,10 @@ pipeline {
                 CI_ENVIRONMENT_URL = "" 
             }
             steps {
-                // script {
-                //     echo "Using CI_ENVIRONMENT_URL: ${CI_ENVIRONMENT_URL}" 
-                // }
-
                 sh '''
                 npm install netlify-cli node-jq
                 node_modules/.bin/netlify deploy --dir=build --json > deploye-out.txt   
                 CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt)
-                echo "$CI_ENVIRONMENT_URL"
                 npx playwright test --reporter=html 
                 '''
             }
