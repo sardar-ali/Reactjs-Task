@@ -125,7 +125,7 @@ pipeline {
                 }
             }
             environment {
-                CI_ENVIRONMENT_URL = "FIX ME" 
+                CI_ENVIRONMENT_URL = "SET_STAGING_URL"
             }
             steps {
                 sh '''
