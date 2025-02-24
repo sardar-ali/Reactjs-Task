@@ -89,33 +89,6 @@ pipeline {
         // }
 
 
-        // stage('Deploy Staging'){
-           
-        //     agent {
-        //         docker {
-        //             image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
-        //             reuseNode true
-        //         }
-        //     }
-        //      environment {
-        //         CI_ENVIRONMENT_URL = "SET_STAGING_URL"
-        //     }
-        //     steps {
-        //         sh '''
-        //             npm install netlify-cli node-jq
-        //             node_modules/.bin/netlify --version
-        //             node_modules/.bin/netlify status
-        //             node_modules/.bin/netlify deploy --dir=build --json > deploy-output.json
-        //             CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json)
-        //             npx playwright test --reporter=html
-        //         '''
-        //     }
-        //     post {
-        //         always {
-        //             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Staging Report', reportTitles: '', useWrapperFileDirectly: true])
-        //         }
-        //     }
-        // }
 
         stage("Staging E2E Test") {
             agent {
@@ -130,8 +103,8 @@ pipeline {
             steps {
                 sh '''
                 npm install netlify-cli node-jq
-                node_modules/.bin/netlify deploy --dir=build --json > deploye-out.txt   
-                CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt)
+                node_modules/.bin/netlify deploy --dir=build --json > deploy-out.txt   
+                CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploy-out.txt)
                 npx playwright test --reporter=html 
                 '''
             }
@@ -154,24 +127,24 @@ pipeline {
             }
         }
 
-        stage('Production Deploy') {
-                    agent {
-                        docker {
-                            image 'node:20.18.3-alpine3.20'
-                            reuseNode true
-                        }
-                    }
-                    steps {
+        // stage('Production Deploy') {
+        //             agent {
+        //                 docker {
+        //                     image 'node:20.18.3-alpine3.20'
+        //                     reuseNode true
+        //                 }
+        //             }
+        //             steps {
 
-                        sh '''
-                        npm install netlify-cli
-                        node_modules/.bin/netlify --version
-                        node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
-                        '''
-                    }
-        }
+        //                 sh '''
+        //                 npm install netlify-cli
+        //                 node_modules/.bin/netlify --version
+        //                 node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
+        //                 '''
+        //             }
+        // }
 
-        stage ("Production E2E Test") {
+        stage ("Production Deploy") {
             agent{
                 docker{
                     image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
@@ -183,8 +156,11 @@ pipeline {
             }
             steps {
                 sh '''
-                echo " CI_ENVIRONMENT_URL: $CI_ENVIRONMENT_URL"
-                npx playwright test --reporter=html 
+                    npm install netlify-cli
+                    node_modules/.bin/netlify --version
+                    node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
+                    echo " CI_ENVIRONMENT_URL: $CI_ENVIRONMENT_URL"
+                    npx playwright test --reporter=html 
                 '''
             }
             post {
