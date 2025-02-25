@@ -88,7 +88,7 @@ pipeline {
             steps {
                 sh '''
                 netlify deploy --dir=build --json > deploy-out.txt   
-                CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' deploy-out.txt)
+                CI_ENVIRONMENT_URL=$(jq -r '.deploy_url' deploy-out.txt)
                 npx playwright test --reporter=html 
                 '''
             }
