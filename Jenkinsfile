@@ -128,6 +128,29 @@ pipeline {
                 }
             }
         }
+
+        stage ("Production E2E Test") {
+            agent{
+                docker{
+                    image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
+                    reuseNode true
+                }
+            }
+            environment {
+                CI_ENVIRONMENT_URL="https://cheery-mooncake-c6e19d.netlify.app/"
+            }
+            steps {
+                sh '''
+                echo " CI_ENVIRONMENT_URL: $CI_ENVIRONMENT_URL"
+                npx playwright test --reporter=html 
+                '''
+            }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Prod Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                }
+            }
+        }
         
     }
 }
