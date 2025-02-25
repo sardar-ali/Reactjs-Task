@@ -7,6 +7,14 @@ pipeline {
     }
 
     stages {
+
+        stage("Build Docker image"){
+            steps{
+                sh '''
+                docker build -t playwright ci/dockerfile-playwright .
+                '''
+            }
+        }
         stage('Build') {
             agent{
                 docker {
@@ -48,14 +56,13 @@ pipeline {
         stage ("E2E Test") {
             agent{
                 docker{
-                    image 'ci/dockerfile-playwright'
+                    image 'playwright'
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                npm install serve
-                node_modules/.bin/serve -s build &
+                serve -s build &
                 sleep 10
                 npx playwright test --reporter=html 
                 '''
@@ -70,7 +77,7 @@ pipeline {
         stage("Staging E2E Test") {
             agent {
                 docker {
-                    image 'ci/dockerfile-playwright'
+                    image 'playwright'
                     reuseNode true
                 }
             }
@@ -80,9 +87,8 @@ pipeline {
             }
             steps {
                 sh '''
-                npm install netlify-cli node-jq
-                node_modules/.bin/netlify deploy --dir=build --json > deploy-out.txt   
-                CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploy-out.txt)
+                netlify deploy --dir=build --json > deploy-out.txt   
+                CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' deploy-out.txt)
                 npx playwright test --reporter=html 
                 '''
             }
@@ -106,7 +112,7 @@ pipeline {
         stage ("Production Deploy") {
             agent{
                 docker{
-                    image 'ci/dockerfile-playwright'
+                    image 'playwright'
                     reuseNode true
                 }
             }
@@ -115,9 +121,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    npm install netlify-cli
-                    node_modules/.bin/netlify --version
-                    node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
+                    netlify --version
+                    netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
                     echo " CI_ENVIRONMENT_URL: $CI_ENVIRONMENT_URL"
                     npx playwright test --reporter=html 
                 '''
@@ -132,7 +137,7 @@ pipeline {
         stage ("Production E2E Test") {
             agent{
                 docker{
-                    image 'ci/dockerfile-playwright'
+                    image 'playwright'
                     reuseNode true
                 }
             }
