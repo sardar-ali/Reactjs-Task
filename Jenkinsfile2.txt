@@ -67,13 +67,35 @@ pipeline {
             }
         }
 
+        // stage('Staging deploy') {
+        //     agent {
+        //         docker {
+        //             image 'node:20.18.3-alpine3.20'
+        //             reuseNode true
+        //         }
+        //     }
+        //     steps {
+        //         sh '''
+        //         // npm install netlify-cli node-jq
+        //         // node_modules/.bin/netlify deploy --dir=build --json > deploye-out.txt     
+        //         '''
+        //         script {
+        //             // Store the deploy URL in an environment variable
+        //             env.DATA = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploye-out.txt", returnStdout: true).trim()
+        //             echo "Netlify Deploy URL: $env.DATA"
+        //             echo "Builder number and application version :: $REACT_APP_VERSION"
+        //         }
+        //     }
+        // }
+
+
+
         stage("Staging E2E Test") {
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.50.1-jammy'
                     reuseNode true
                 }
-            }
             // this defualt value is mandatory other it will throw error
             environment {
                 CI_ENVIRONMENT_URL = "FIX_ME"
@@ -97,11 +119,30 @@ pipeline {
             steps {
                 script {
                     timeout(time: 5, unit: 'MINUTES') {
+                        // some block
+                    // Wait for approval
                     input message: 'Are you sure your want to deploy to production ?', ok: 'Are you sure'
                     }   
                 }
             }
         }
+
+        // stage('Production Deploy') {
+        //             agent {
+        //                 docker {
+        //                     image 'node:20.18.3-alpine3.20'
+        //                     reuseNode true
+        //                 }
+        //             }
+        //             steps {
+
+        //                 sh '''
+        //                 npm install netlify-cli
+        //                 node_modules/.bin/netlify --version
+        //                 node_modules/.bin/netlify deploy --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --prod --dir=build
+        //                 '''
+        //             }
+        // }
 
         stage ("Production Deploy") {
             agent{
