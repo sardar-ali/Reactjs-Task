@@ -48,7 +48,7 @@ pipeline {
         stage ("E2E Test") {
             agent{
                 docker{
-                    image 'src/ci/Dockerfile-playwright'
+                    image 'ci/Dockerfile-playwright'
                     reuseNode true
                 }
             }
@@ -70,7 +70,7 @@ pipeline {
         stage("Staging E2E Test") {
             agent {
                 docker {
-                    image 'src/ci/Dockerfile-playwright'
+                    image 'ci/Dockerfile-playwright'
                     reuseNode true
                 }
             }
@@ -106,7 +106,7 @@ pipeline {
         stage ("Production Deploy") {
             agent{
                 docker{
-                    image 'src/ci/Dockerfile-playwright'
+                    image 'ci/Dockerfile-playwright'
                     reuseNode true
                 }
             }
@@ -132,7 +132,7 @@ pipeline {
         stage ("Production E2E Test") {
             agent{
                 docker{
-                    image 'src/ci/Dockerfile-playwright'
+                    image 'ci/Dockerfile-playwright'
                     reuseNode true
                 }
             }
