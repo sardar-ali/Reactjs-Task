@@ -38,7 +38,7 @@ pipeline {
             agent{
                 docker {
                     image "amazon/aws-cli:2.23.15"
-                    args "--entrypoint=''"
+                    // args "--entrypoint=''"
                 }
             }
             environment {
