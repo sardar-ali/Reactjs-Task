@@ -41,6 +41,9 @@ pipeline {
                     args "--entrypoint=''"
                 }
             }
+            environment {
+                AWS_BUCKET_NAME = "react-apps-cicd"
+            }
             steps{
                 withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh '''
