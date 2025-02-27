@@ -34,26 +34,6 @@ pipeline {
             }
         }
 
-        stage("AWS S3 Deployment"){
-            agent{
-                docker {
-                    image "amazon/aws-cli:2.23.15"
-                    args "--entrypoint=''"
-                }
-            }
-            environment {
-                AWS_BUCKET_NAME = "react-apps-cicd"
-            }
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-                sh '''
-                  aws s3 sync build  s3://$AWS_BUCKET_NAME
-                '''
-                }
-            
-            }
-        }
-
         stage('Test') {
               agent{
                 docker {
@@ -142,6 +122,26 @@ pipeline {
                 always {
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Prod Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
                 }
+            }
+        }
+
+         stage("AWS S3 Deployment"){
+            agent{
+                docker {
+                    image "amazon/aws-cli:2.23.15"
+                    args "--entrypoint=''"
+                }
+            }
+            environment {
+                AWS_BUCKET_NAME = "react-apps-cicd"
+            }
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                sh '''
+                  aws s3 sync build  s3://$AWS_BUCKET_NAME
+                '''
+                }
+            
             }
         }
 
