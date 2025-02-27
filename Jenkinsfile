@@ -125,10 +125,11 @@ pipeline {
             }
         }
 
-         stage("AWS S3 Deployment"){
+        stage("AWS S3 Deployment"){
             agent{
                 docker {
                     image "amazon/aws-cli:2.23.15"
+                    reuseNode true
                     args "--entrypoint=''"
                 }
             }
@@ -138,6 +139,7 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh '''
+                 echo " CI_ENVIRONMENT_URL: $REACT_APP_VERSION"
                   aws s3 sync build  s3://$AWS_BUCKET_NAME
                 '''
                 }
