@@ -15,7 +15,7 @@ pipeline {
                 '''
             }
         }
-        
+
         stage('Build') {
             agent{
                 docker {
@@ -31,6 +31,24 @@ pipeline {
                 npm install
                 npm run build
                 '''
+            }
+        }
+
+        stage("AWS S3 Deployment"){
+            agent{
+                docker {
+                    image "amazon/aws-cli:2.23.15"
+                    args "--entrypoint=''"
+                }
+            }
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                sh '''
+                    aws --version
+                    aws s3 ls
+                '''
+                }
+            
             }
         }
 
