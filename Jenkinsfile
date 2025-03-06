@@ -49,8 +49,7 @@ pipeline {
                     sh '''
                     yum install jq -y
                     RESULT=$(aws ecs register-task-definition --region $AWS_REGION --cli-input-json file://aws/task-definition-prod.json | jq -r ".taskDefinition.revision")
-                    echo "$RESULT.taskDefinition"
-                    aws ecs update-service --service react-app-jenkins-Service-Prod --cluster react-app-jenkins-prod --task-definition react-app-jenkins-task-definition-prod:2
+                    aws ecs update-service --service react-app-jenkins-Service-Prod --cluster react-app-jenkins-prod --task-definition react-app-jenkins-task-definition-prod:$RESULT
                     '''
                
                 // sh '''
