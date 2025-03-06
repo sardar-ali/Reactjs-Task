@@ -47,7 +47,7 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
-                    yum install jq -y
+                    sudo yum install jq -y
                     RESULT=$(aws ecs register-task-definition --region $AWS_REGION --cli-input-json file://aws/task-definition-prod.json | jq -r ".revision")
                     echo "$RESULT.taskDefinition"
                     aws ecs update-service --service react-app-jenkins-Service-Prod --cluster react-app-jenkins-prod --task-definition react-app-jenkins-task-definition-prod:2
