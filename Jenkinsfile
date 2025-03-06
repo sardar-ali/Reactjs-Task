@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        REACT_APP_VERSION = "1.0.${BUILD_NUMBER}" 
+        REACT_APP_VERSION = "1.0.${BUILD_NUMBER}"
+        AWS_REGION = "us-east-1" // north N. Virginia us-east-1
     }
 
     stages {
@@ -46,7 +47,7 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
-                    aws ecs register-task-definition --cli-input-json file://aws/task-definition-prod.json
+                    aws ecs register-task-definition --region $AWS_REGION --cli-input-json file://aws/task-definition-prod.json
                     '''
                         // aws ecs update-service --service react-app-jenkins-Service-Prod --task-definition react-app-jenkins-task-definition-prod --cluster react-app-jenkins-prod
                
