@@ -61,12 +61,12 @@ pipeline {
         // }
 
 
-        stage("AWS S3 Deployment"){
+        stage("AWS Deployment"){
             agent{
                 docker {
                     image "amazon-aws-cli"
                     reuseNode true
-                    args "--entrypoint=''"
+                    args "--u root --entrypoint=''"
                 }
             }
             environment {
