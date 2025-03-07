@@ -54,7 +54,6 @@ pipeline {
                             aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR
                             docker push $AWS_ECR/$APP_NAME:$REACT_APP_VERSION
                         '''
-                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR
                 }
             }
         }
