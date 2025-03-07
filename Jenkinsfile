@@ -64,7 +64,7 @@ pipeline {
         stage("AWS S3 Deployment"){
             agent{
                 docker {
-                    image "amazon/aws-cli:2.23.15"
+                    image "amazon-aws-cli"
                     reuseNode true
                     args "--entrypoint=''"
                 }
