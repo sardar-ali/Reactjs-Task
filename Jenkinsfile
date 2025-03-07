@@ -3,6 +3,7 @@ pipeline {
     environment {
         REACT_APP_VERSION = "1.0.${BUILD_NUMBER}"
          APP_NAME = "react-app-jenkins"
+        AWS_ECR = "339712840512.dkr.ecr.us-east-1.amazonaws.com"
         AWS_ECS_CLUSTER_NAME_PROD = "react-app-jenkins-prod"
         AWS_ECS_SERVICE_NAME_PROD = "react-app-jenkins-Service-Prod"
         AWS_ECS_TD_NAME_PROD= "react-app-jenkins-task-definition-prod"
@@ -33,32 +34,30 @@ pipeline {
                     sh '''
                         docker build -t playwright -f ci/Dockerfile-playwright .
                         docker build -t  amazon-aws-cli -f ci/Dockerfile-aws-cli .
-                        docker build -t $APP_NAME:$REACT_APP_VERSION .
+                        docker build -t  $AWS_ECR/$APP_NAME:$REACT_APP_VERSION .
                     '''
             }
         }
 
 
-        // stage("Build Docker image"){
-        //     agent{
-        //         docker {
-        //             image "amazon-aws-cli:2.23.15"
-        //             reuseNode true
-        //             args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
-        //         }
-        //     }
-        //     steps {
-        //             // withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-        //                 sh '''
-        //                    docker tag amazon-aws-cli $ECR_REPO/$APP_NAME:$REACT_APP_VERSION
-        //                     aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
-        //                     docker build -t $ECR_REPO/$APP_NAME:$REACT_APP_VERSION .
-        //                     docker push $ECR_REPO/$APP_NAME:$REACT_APP_VERSION
-        //                 '''
-        //                 // aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
-        //         // }
-        //     }
-        // }
+        stage("Push Docker image T0 AWS ECR"){
+            agent{
+                docker {
+                    image "amazon-aws-cli"
+                    reuseNode true
+                    args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
+                }
+            }
+            steps {
+                    withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                        sh '''
+                            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR
+                            docker push $AWS_ECR/$APP_NAME:$REACT_APP_VERSION
+                        '''
+                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR
+                }
+            }
+        }
 
 
         stage("AWS Deployment"){
