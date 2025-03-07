@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         REACT_APP_VERSION = "1.0.${BUILD_NUMBER}"
+         APP_NAME = "react-app-jenkins"
         AWS_ECS_CLUSTER_NAME_PROD = "react-app-jenkins-prod"
         AWS_ECS_SERVICE_NAME_PROD = "react-app-jenkins-Service-Prod"
         AWS_ECS_TD_NAME_PROD= "react-app-jenkins-task-definition-prod"
@@ -10,14 +11,7 @@ pipeline {
 
     stages {
 
-        stage("Build Docker image"){
-            steps{
-                sh '''
-                docker build -t playwright -f ci/Dockerfile-playwright .
-                '''
-            }
-        }
-
+       
         stage('Build') {
             agent{
                 docker {
@@ -28,13 +22,21 @@ pipeline {
             steps {
                 
                 sh '''
-                node --version
-                npm --version
                 npm install
                 npm run build
                 '''
             }
         }
+
+        stage("Build Docker image"){
+            steps{
+                sh '''
+                docker build -t playwright -f ci/Dockerfile-playwright .
+                docker build -t  $APP_NAME .
+                '''
+            }
+        }
+
 
         stage("AWS S3 Deployment"){
             agent{
@@ -53,7 +55,7 @@ pipeline {
                     yum install jq -y
                     RESULT=$(aws ecs register-task-definition --region $AWS_REGION --cli-input-json file://aws/task-definition-prod.json | jq -r ".taskDefinition.revision")
                     aws ecs update-service  --cluster $AWS_ECS_CLUSTER_NAME_PROD --service $AWS_ECS_SERVICE_NAME_PROD --task-definition $AWS_ECS_TD_NAME_PROD:$RESULT
-                   aws ecs wait services-stable --cluster $AWS_ECS_CLUSTER_NAME_PROD  --services $AWS_ECS_SERVICE_NAME_PROD --region $AWS_REGION
+                    aws ecs wait services-stable --cluster $AWS_ECS_CLUSTER_NAME_PROD  --services $AWS_ECS_SERVICE_NAME_PROD --region $AWS_REGION
                     '''
                 // sh '''
                 //  echo " CI_ENVIRONMENT_URL: $REACT_APP_VERSION"
