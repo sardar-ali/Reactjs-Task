@@ -33,7 +33,7 @@ pipeline {
                     sh '''
                         docker build -t playwright -f ci/Dockerfile-playwright .
                         docker build -t  amazon-aws-cli -f ci/Dockerfile-aws-cli .
-                        docker build -t $$APP_NAME:$REACT_APP_VERSION 
+                        docker build -t $APP_NAME:$REACT_APP_VERSION 
                     '''
             }
         }
