@@ -27,27 +27,38 @@ pipeline {
                 '''
             }
         }
-
+    
         stage("Build Docker image"){
-            agent{
-                docker {
-                    image "amazon/aws-cli:2.23.15"
-                    reuseNode true
-                    args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
-                }
-            }
             steps {
-                    // withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-                        sh '''
-                            yum update -y
-                            amazon-linux-extras install docker
-                            docker build -t playwright -f ci/Dockerfile-playwright .
-                            docker build -t  $APP_NAME:$REACT_APP_VERSION .
-                        '''
-                        // aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
-                // }
+                    sh '''
+                        docker build -t playwright -f ci/Dockerfile-playwright .
+                        docker build -t  amazon-aws-cli -f ci/Dockerfile-aws-cli .
+                        docker build -t $$APP_NAME:$REACT_APP_VERSION 
+                    '''
             }
         }
+
+
+        // stage("Build Docker image"){
+        //     agent{
+        //         docker {
+        //             image "amazon-aws-cli:2.23.15"
+        //             reuseNode true
+        //             args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
+        //         }
+        //     }
+        //     steps {
+        //             // withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+        //                 sh '''
+        //                    docker tag amazon-aws-cli $ECR_REPO/$APP_NAME:$REACT_APP_VERSION
+        //                     aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
+        //                     docker build -t $ECR_REPO/$APP_NAME:$REACT_APP_VERSION .
+        //                     docker push $ECR_REPO/$APP_NAME:$REACT_APP_VERSION
+        //                 '''
+        //                 // aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
+        //         // }
+        //     }
+        // }
 
 
         stage("AWS S3 Deployment"){
