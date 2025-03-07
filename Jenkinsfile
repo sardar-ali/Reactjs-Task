@@ -37,13 +37,17 @@ pipeline {
                 }
             }
             steps {
-                    withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    // withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                         sh '''
+                       yum update -y
+                       yum install -y docker
+                       service docker start
+
                         docker build -t playwright -f ci/Dockerfile-playwright .
                         docker build -t  $APP_NAME:$REACT_APP_VERSION .
                         '''
                         // aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
-                }
+                // }
             }
         }
 
