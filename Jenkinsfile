@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         REACT_APP_VERSION = "1.0.${BUILD_NUMBER}"
-         APP_NAME = "react-app-jenkins"
+        APP_NAME = "react-app-jenkins"
         AWS_ECR = "339712840512.dkr.ecr.us-east-1.amazonaws.com"
         AWS_ECS_CLUSTER_NAME_PROD = "react-app-jenkins-prod"
         AWS_ECS_SERVICE_NAME_PROD = "react-app-jenkins-Service-Prod"
@@ -74,6 +74,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'my-cloud2', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
                     yum install jq -y
+                    sed -i "s/#APP_VERSION#/$REACT_APP_VERSION/g"  aws/task-definition-prod.json
                     RESULT=$(aws ecs register-task-definition --region $AWS_REGION --cli-input-json file://aws/task-definition-prod.json | jq -r ".taskDefinition.revision")
                     aws ecs update-service  --cluster $AWS_ECS_CLUSTER_NAME_PROD --service $AWS_ECS_SERVICE_NAME_PROD --task-definition $AWS_ECS_TD_NAME_PROD:$RESULT
                     aws ecs wait services-stable --cluster $AWS_ECS_CLUSTER_NAME_PROD  --services $AWS_ECS_SERVICE_NAME_PROD --region $AWS_REGION

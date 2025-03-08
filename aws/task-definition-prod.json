@@ -4,7 +4,7 @@
   "containerDefinitions": [
     {
       "name": "react-app-jenkins",
-      "image": "339712840512.dkr.ecr.us-east-1.amazonaws.com/react-app-jenkins:1.0.174",
+      "image": "339712840512.dkr.ecr.us-east-1.amazonaws.com/react-app-jenkins:#APP_VERSION#",
       "essential": true,
       "portMappings": [
         {
